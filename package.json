@@ -1,0 +1,27 @@
+{
+  "name": "marionette-contact-manager",
+  "version": "1.0.0",
+  "description": "Marionette Contact Manager ========================",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmytroyarmak/marionette-contact-manager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmytroyarmak/marionette-contact-manager/issues"
+  },
+  "homepage": "https://github.com/dmytroyarmak/marionette-contact-manager#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-serve": "^0.1.6"
+  },
+  "dependencies": {
+    "backbone-tableview": "^1.0.5"
+  }
+}

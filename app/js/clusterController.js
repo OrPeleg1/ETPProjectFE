@@ -8,17 +8,9 @@ ClusterMonitor.ClusterController = Marionette.Controller.extend({
     var me = this;
     var clustersCollection = new ClusterMonitor.Collections.ClusterCollection();
 
-    // $.when(me._fetchClusters(me, clustersCollection))
-    //     .done(function () {
-    //       //fetch the collection every 1 min
-    //       setInterval(function () {
-    //         me._fetchClusters(me, clustersCollection);
-    //       }, 60000);
-    //     });
-
     me._fetchClusters(me, clustersCollection);
 
-    //fetch the collection every 10 sec
+    //fetch the collection every 1 min
     setInterval(function () {
       me._fetchClusters(me, clustersCollection);
     }, 60000);

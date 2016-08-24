@@ -5,17 +5,42 @@ ClusterMonitor.ClusterController = Marionette.Controller.extend({
     this._mainRegion = options.mainRegion;
 
 
-    //this._clusters.fetch({silent: true});
-    //this._clusters._reset()
+    var me = this;
+    var clustersCollection = new ClusterMonitor.Collections.ClusterCollection();
 
-    if (this._clusters.isEmpty()) {
-      this._createSampleData();
-    }
+    // $.when(me._fetchClusters(me, clustersCollection))
+    //     .done(function () {
+    //       //fetch the collection every 1 min
+    //       setInterval(function () {
+    //         me._fetchClusters(me, clustersCollection);
+    //       }, 60000);
+    //     });
 
+    me._fetchClusters(me, clustersCollection);
+
+    //fetch the collection every 10 sec
+    setInterval(function () {
+      me._fetchClusters(me, clustersCollection);
+    }, 60000);
   },
 
-  fetchClusters: function () {
-    this._clusters.fetch({reset: true, silent: true});
+  _fetchClusters: function (me, clustersCollection) {
+    me._clusters.fetch()
+        .done(function(response) {
+          console.log("Success!");
+          if (response === 0) {
+            me._createSampleData();
+          }
+          for(var index in response){
+            var model =new ClusterMonitor.Models.ClusterModel(response[index], {parse: true});
+            clustersCollection.add(model);
+          }
+          me._clusters = clustersCollection;
+          me.showClusters();
+        })
+        .fail(function(response) {
+          console.log("Error!");
+        });
   },
 
   showClusters: function() {
@@ -28,39 +53,10 @@ ClusterMonitor.ClusterController = Marionette.Controller.extend({
     var clustersView = new ClusterMonitor.Views.ClustersView({
       collection: resultArray
     });
-    // clustersView.render();
 
+    // clustersView.collection.models.sort(this.compareByDC);
 
-    //clustersView.collection.models.sort(this.compareByDC);
-
-
-    //TODO:fetch the collection every 10 sec
-    // setInterval(function () {
-    //   clustersView.collection.localStorage.clear;
-    //
-    //   clustersView.collection.fetch();
-    // }, 10000);
-
-    // this.listenTo(clustersView, 'sync reset', this.fetchClusters);
-    // // this.listenTo(ClusterMonitor.Models.ClusterModel,'severity')
-    // this.listenTo(clustersView, 'addContact:clicked', this.newContact);
-    // this.listenTo(clustersView, 'itemview:delete:clicked', function(clusterView) {
-    //   clusterView.model.destroy();
-    // });
-    // this.listenTo(clustersView, 'itemview:edit:clicked', function(clusterView) {
-    //   this.editContact(clusterView.model.id);
-    // });
-
-     // var index = 0;
-     //
-     // for (index in clustersArr)
-     // {
-     //   var newClusterView = new ClusterMonitor.Views.ClustersView({
-     //     collection: new Backbone.Collection(clustersArr[index]),
-     //   });
     ClusterMonitor.mainRegion.show(clustersView);
-     //   index++;
-     // }
 
     this._router.navigate('clusters');
     
@@ -80,7 +76,10 @@ ClusterMonitor.ClusterController = Marionette.Controller.extend({
     var arrOfObjs =[[],[],[],[]];
     var index =0 ;
     for(index in clusters.models){
-      arrOfObjs[parseInt(clusters.models[index].get('dc'))-1].push(clusters.models[index]);
+      if(clusters.models[index].get('dc')!== null)
+      {
+        arrOfObjs[parseInt(clusters.models[index].get('dc'))-1].push(clusters.models[index]);
+      }
       index++
     }
     return arrOfObjs;

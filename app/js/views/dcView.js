@@ -9,6 +9,7 @@ ClusterMonitor.Views.DCView = Marionette.CompositeView.extend({
     render: function () {
         var elem = this.$el
         this.options.collection.each(function (clusterModel) {
+            // console.log('model',clusterModel);
             var clusterView = new ClusterMonitor.Views.ClusterView({
                 model: clusterModel
             });

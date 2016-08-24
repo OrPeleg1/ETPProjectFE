@@ -42,9 +42,7 @@ ClusterMonitor.addInitializer(function(data) {
 
 
   router.processAppRoutes(controller, {
-    'clusters': 'showClusters',
-    'clusters/new': 'newContact',
-    'cluster/edit/:id': 'editContact'
+    // 'clusters': 'showClusters'
   });
 
 
